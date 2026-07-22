@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <title>보건의료 데이터 포털을 위한 응용 프로파일 (HealthData DCAT-AP)</title>
+  <meta content="width=device-width, initial-scale=1" name="viewport">
+  <script src="https://www.w3.org/Tools/respec/respec-w3c" class="remove" defer></script>
+  <script class="remove">
+    var respecConfig = {
+      specStatus: "unofficial",
+      shortName: "healthdata-dcat-ap",
+      editors: [
+        { name: "편집자", company: "기관명" }
+      ],
+      publishDate: "2026-07-22",
+      edDraftURI: "https://your-username.github.io/healthdata-spec/",
+      latestVersion: null,
+      github: "https://github.com/your-username/healthdata-spec",
+      lint: false,
+      logos: [],
+      localBiblio: {
+        "DCAT-AP": {
+          title: "DCAT Application Profile for data portals in Europe",
+          href: "https://joinup.ec.europa.eu/collection/semantic-interoperability-community-semic/solution/dcat-application-profile-data-portals-europe"
+        },
+        "HealthDCAT-AP": {
+          title: "HealthDCAT-AP",
+          href: "https://healthdcat-ap.github.io/"
+        },
+        "DCAT-AP-KR": {
+          title: "대한민국의 데이터 포털을 위한 응용 프로파일 (DCAT-AP-KR)",
+          href: "https://vocab.datahub.kr/def/dcat-ap-kr/"
+        }
+      }
+    };
+  </script>
+  <style>
+    /* 요구수준 배지 — 속성 제목 우측 */
+    h4 { display: flex; align-items: baseline; gap: .5rem; }
+    .reqlevel {
+      margin-left: auto;
+      font-size: .62rem;
+      font-weight: 700;
+      line-height: 1;
+      padding: .3em .6em;
+      border-radius: 999px;
+      color: #fff;
+      white-space: nowrap;
+    }
+    .reqlevel.req { background:#e53935; }
+    .reqlevel.rec { background:#1e88e5; }
+    .reqlevel.opt { background:#9e9e9e; }
+    .kolabel { color:#666; font-weight:400; }
+    table.def { border-collapse: collapse; margin:.6em 0 1.4em; width:100%; }
+    table.def th, table.def td { border:1px solid #cfd8e3; padding:.5em .7em; text-align:left; vertical-align:top; }
+    table.def th { background:#f2f5fa; width:130px; white-space:nowrap; }
+    .legend span.reqlevel { margin-left:0; }
+  </style>
+</head>
+<body>
+<section id="abstract">
+  <p>이 표준은 국내 보건의료 데이터 포털에서 제공하는 데이터셋을 의미적으로 표현하는 DCAT 응용 프로파일을 RDF 어휘로 정의한다.
+  데이터 카탈로그와 데이터셋을 기술하기 위한 메타데이터를 필수·권장·선택 요소로 구체화하며,
+  [[DCAT-AP]] 및 [[HealthDCAT-AP]] 를 기반으로 하고 [[DCAT-AP-KR]] 의 문서 구조를 따른다.
+  이 문서의 각 속성 요구 수준은 <strong>중개포털(안)</strong> 기준으로 표기한다.</p>
+</section>
+
+<section id="sotd" class="introductory">
+  <p>이 문서는 초안이며 내용은 변경될 수 있다.</p>
+</section>
+
+<section id="introduction">
+  <h2>Introduction</h2>
+  <p>본 명세는 보건의료 데이터의 상호운용성을 높이기 위해 카탈로그, 데이터셋, 데이터 서비스, 배포,
+  카탈로그 레코드, 데이터상품 클래스와 각 속성을 정의한다. 각 속성에는 중개포털(안) 기준의 요구 수준을 함께 명시한다.</p>
+  <p class="legend">요구 수준 범례:
+    <span class="reqlevel req">필수</span> 반드시 제공
+    <span class="reqlevel rec">권장</span> 제공 권장
+    <span class="reqlevel opt">선택</span> 선택 제공
+  </p>
+</section>
+
+<section id="modeling">
+  <h2>모델링 원칙</h2>
+  <p>본 프로파일은 DCAT의 핵심 클래스를 재사용하고, 보건의료 특화 속성은 HealthDCAT-AP의 어휘(<code>healthdcatap:</code>)를,
+  플랫폼 운영 속성은 <code>ndi:</code> 네임스페이스를 사용한다.</p>
+</section>
+
+<section id="namespace">
+  <h2>Namespace</h2>
+  <table class="def">
+    <tr><th>접두사</th><td>네임스페이스 IRI</td></tr>
+    <tr><td><code>dcat</code></td><td>http://www.w3.org/ns/dcat#</td></tr>
+    <tr><td><code>dct</code></td><td>http://purl.org/dc/terms/</td></tr>
+    <tr><td><code>dcatap</code></td><td>http://data.europa.eu/r5r/</td></tr>
+    <tr><td><code>healthdcatap</code></td><td>http://healthdataportal.eu/ns/health#</td></tr>
+    <tr><td><code>adms</code></td><td>http://www.w3.org/ns/adms#</td></tr>
+    <tr><td><code>dpv</code></td><td>https://w3id.org/dpv#</td></tr>
+    <tr><td><code>dqv</code></td><td>http://www.w3.org/ns/dqv#</td></tr>
+    <tr><td><code>foaf</code></td><td>http://xmlns.com/foaf/0.1/</td></tr>
+    <tr><td><code>ndi</code></td><td>http://ndi.example/ns#</td></tr>
+  </table>
+</section>
+
+<section id="terminology">
+  <h2>Terminology</h2>
+  <p><dfn>필수</dfn>는 반드시 제공해야 하는 속성, <dfn>권장</dfn>은 제공을 권장하는 속성, <dfn>선택</dfn>은 선택적으로 제공할 수 있는 속성을 의미한다.</p>
+</section>
+
+<section id="vocab-spec">
+<h2>Vocabulary specification</h2>
+<p>이 절은 각 클래스와 속성의 정의를 기술한다. 각 속성 제목 우측의 배지는 <strong>중개포털(안)</strong> 기준의 요구 수준(필수·권장)을 나타낸다.</p>
+<section id="class-catalog">
+<h3>Class: Catalog <span class="kolabel">(카탈로그)</span></h3>
+<p><code>dcat:Catalog</code></p>
+<p>데이터 카탈로그. 데이터셋과 데이터 서비스에 대한 메타데이터를 모아 관리하는 큐레이션된 목록.</p>
+<section id="class-catalog-title">
+<h4>Property: title <span class="reqlevel req">필수</span></h4>
+<table class="def">
+<tr><th>RDF 속성명</th><td><code>dct:title</code></td></tr>
+<tr><th>라벨</th><td>제목</td></tr>
+<tr><th>설명</th><td>카탈로그에 지정된 이름</td></tr>
+<tr><th>요구 수준</th><td>필수 (중개포털)</td></tr>
+</table>
+</section>
+<section id="class-catalog-description">
+<h4>Property: description <span class="reqlevel req">필수</span></h4>
+<table class="def">
+<tr><th>RDF 속성명</th><td><code>dct:description</code></td></tr>
+<tr><th>라벨</th><td>설명</td></tr>
+<tr><th>설명</th><td>카탈로그에 대한 설명</td></tr>
+<tr><th>요구 수준</th><td>필수 (중개포털)</td></tr>
+</table>
+</section>
+<section id="class-catalog-publisher">
+<h4>Property: publisher <span class="reqlevel req">필수</span></h4>
+<table class="def">
+<tr><th>RDF 속성명</th><td><code>dct:publisher</code></td></tr>
+<tr><th>라벨</th><td>발행기관</td></tr>
+<tr><th>설명</th><td>데이터를 게재하여 제공하는 기관/단체(플랫폼 사업자번호)의 정보</td></tr>
+<tr><th>요구 수준</th><td>필수 (중개포털)</td></tr>
+</table>
+</section>
+<section id="class-catalog-dataset">
+<h4>Property: dataset <span class="reqlevel rec">권장</span></h4>
+<table class="def">
+<tr><th>RDF 속성명</th><td><code>dcat:dataset</code></td></tr>
+<tr><th>라벨</th><td>데이터셋</td></tr>
+<tr><th>설명</th><td>카탈로그에 나열된 데이터 집합</td></tr>
+<tr><th>요구 수준</th><td>권장 (중개포털)</td></tr>
+</table>
+</section>
+<section id="class-catalog-homepage">
+<h4>Property: homepage <span class="reqlevel rec">권장</span></h4>
+<table class="def">
+<tr><th>RDF 속성명</th><td><code>foaf:homepage</code></td></tr>
+<tr><th>라벨</th><td>홈페이지</td></tr>
+<tr><th>설명</th><td>카탈로그의 기본 페이지 역할을 하는 웹 페이지를 참조</td></tr>
+<tr><th>요구 수준</th><td>권장 (중개포털)</td></tr>
+</table>
+</section>
+<section id="class-catalog-language">
+<h4>Property: language <span class="reqlevel rec">권장</span></h4>
+<table class="def">
+<tr><th>RDF 속성명</th><td><code>dct:language</code></td></tr>
+<tr><th>라벨</th><td>언어</td></tr>
+<tr><th>설명</th><td>카탈로그에 있는 데이터셋의 메타데이터에 사용되는 언어(ISO 639-1 참조)</td></tr>
+<tr><th>요구 수준</th><td>권장 (중개포털)</td></tr>
+</table>
+</section>
+<section id="class-catalog-license">
+<h4>Property: license <span class="reqlevel rec">권장</span></h4>
+<table class="def">
+<tr><th>RDF 속성명</th><td><code>dct:license</code></td></tr>
+<tr><th>라벨</th><td>라이선스</td></tr>
+<tr><th>설명</th><td>카탈로그를 사용하거나 재사용할 수 있는 라이선스 표시</td></tr>
+<tr><th>요구 수준</th><td>권장 (중개포털)</td></tr>
+</table>
+</section>
+<section id="class-catalog-issued">
+<h4>Property: issued <span class="reqlevel rec">권장</span></h4>
+<table class="def">
+<tr><th>RDF 속성명</th><td><code>dct:issued</code></td></tr>
+<tr><th>라벨</th><td>최초 발행일</td></tr>
+<tr><th>설명</th><td>카탈로그를 플랫폼에 등록한 일자 (초기 등록 후 변경 금지)</td></tr>
+<tr><th>요구 수준</th><td>권장 (중개포털)</td></tr>
+</table>
+</section>
+<section id="class-catalog-modified">
+<h4>Property: modified <span class="reqlevel rec">권장</span></h4>
+<table class="def">
+<tr><th>RDF 속성명</th><td><code>dct:modified</code></td></tr>
+<tr><th>라벨</th><td>최근 수정일</td></tr>
+<tr><th>설명</th><td>카탈로그가 수정된 가장 최근 날짜 기입</td></tr>
+<tr><th>요구 수준</th><td>권장 (중개포털)</td></tr>
+</table>
+</section>
+<section id="class-catalog-spatial">
+<h4>Property: spatial <span class="reqlevel rec">권장</span></h4>
+<table class="def">
+<tr><th>RDF 속성명</th><td><code>dct:spatial</code></td></tr>
+<tr><th>라벨</th><td>지리적 범위</td></tr>
+<tr><th>설명</th><td>카탈로그에 포함된 지리적 범위 표시</td></tr>
+<tr><th>요구 수준</th><td>권장 (중개포털)</td></tr>
+</table>
+</section>
+<section id="class-catalog-themetaxonomy">
+<h4>Property: themeTaxonomy <span class="reqlevel rec">권장</span></h4>
+<table class="def">
+<tr><th>RDF 속성명</th><td><code>dcat:themeTaxonomy</code></td></tr>
+<tr><th>라벨</th><td>분류체계</td></tr>
+<tr><th>설명</th><td>카탈로그의 데이터셋이 카탈로그 분류체계의 어떤 항목에 속해있는지 표시 (부록: 분류체계 참고)</td></tr>
+<tr><th>요구 수준</th><td>권장 (중개포털)</td></tr>
+</table>
+</section>
+<section id="class-catalog-service">
+<h4>Property: service <span class="reqlevel rec">권장</span></h4>
+<table class="def">
+<tr><th>RDF 속성명</th><td><code>dcat:service</code></td></tr>
+<tr><th>라벨</th><td>서비스</td></tr>
+<tr><th>설명</th><td>데이터 카탈로그가 제공하는 서비스를 나타내는 속성</td></tr>
+<tr><th>요구 수준</th><td>권장 (중개포털)</td></tr>
+</table>
+</section>
+</section>
+<section id="class-dataset">
+<h3>Class: Dataset <span class="kolabel">(데이터셋)</span></h3>
+<p><code>dcat:Dataset</code></p>
+<p>한 기관이 게시하거나 큐레이션하고 하나 이상의 형식으로 이용 가능한 데이터의 집합.</p>
+<section id="class-dataset-title">
+<h4>Property: title <span class="reqlevel req">필수</span></h4>
+<table class="def">
+<tr><th>RDF 속성명</th><td><code>dct:title</code></td></tr>
+<tr><th>라벨</th><td>제목</td></tr>
+<tr><th>설명</th><td>데이터셋의 이름을 기입</td></tr>
+<tr><th>요구 수준</th><td>필수 (중개포털)</td></tr>
+</table>
+</section>
+<section id="class-dataset-description">
+<h4>Property: description <span class="reqlevel req">필수</span></h4>
+<table class="def">
+<tr><th>RDF 속성명</th><td><code>dct:description</code></td></tr>
+<tr><th>라벨</th><td>설명</td></tr>
+<tr><th>설명</th><td>데이터셋의 설명 기입</td></tr>
+<tr><th>요구 수준</th><td>필수 (중개포털)</td></tr>
+</table>
+</section>
+<section id="class-dataset-theme">
+<h4>Property: theme <span class="reqlevel req">필수</span></h4>
+<table class="def">
+<tr><th>RDF 속성명</th><td><code>dcat:theme</code></td></tr>
+<tr><th>라벨</th><td>주제</td></tr>
+<tr><th>설명</th><td>데이터셋의 카테고리를 참조. 데이터셋은 여러 테마와 연결 가능</td></tr>
+<tr><th>요구 수준</th><td>필수 (중개포털)</td></tr>
+</table>
+</section>
+<section id="class-dataset-accessrights">
+<h4>Property: accessRights <span class="reqlevel req">필수</span></h4>
+<table class="def">
+<tr><th>RDF 속성명</th><td><code>dct:accessRights</code></td></tr>
+<tr><th>라벨</th><td>접근 권한</td></tr>
+<tr><th>설명</th><td>데이터에 대한 접근권한 기입</td></tr>
+<tr><th>요구 수준</th><td>필수 (중개포털)</td></tr>
+</table>
+</section>
+<section id="class-dataset-identifier">
+<h4>Property: identifier <span class="reqlevel req">필수</span></h4>
+<table class="def">
+<tr><th>RDF 속성명</th><td><code>dct:identifier</code></td></tr>
+<tr><th>라벨</th><td>식별자</td></tr>
+<tr><th>설명</th><td>플랫폼에서 관리하는 데이터셋의 중복되지 않는 고유 식별자 기입</td></tr>
+<tr><th>요구 수준</th><td>필수 (중개포털)</td></tr>
+</table>
+</section>
+<section id="class-dataset-identifier">
+<h4>Property: identifier <span class="reqlevel req">필수</span></h4>
+<table class="def">
+<tr><th>RDF 속성명</th><td><code>adms:identifier</code></td></tr>
+<tr><th>라벨</th><td>보조식별자</td></tr>
+<tr><th>설명</th><td>MAST/ADS, DataCite, DOI, EZID 또는 W3ID와 같은 데이터셋의 보조 식별자 기입</td></tr>
+<tr><th>요구 수준</th><td>필수 (중개포털)</td></tr>
+</table>
+</section>
+<section id="class-dataset-contactpoint">
+<h4>Property: contactPoint <span class="reqlevel rec">권장</span></h4>
+<table class="def">
+<tr><th>RDF 속성명</th><td><code>dcat:contactPoint</code></td></tr>
+<tr><th>라벨</th><td>담당자 연락처</td></tr>
+<tr><th>설명</th><td>데이터셋 담당자에 대한 연락처 정보를 기입</td></tr>
+<tr><th>요구 수준</th><td>권장 (중개포털)</td></tr>
+</table>
+</section>
+<section id="class-dataset-keyword">
+<h4>Property: keyword <span class="reqlevel rec">권장</span></h4>
+<table class="def">
+<tr><th>RDF 속성명</th><td><code>dcat:keyword</code></td></tr>
+<tr><th>라벨</th><td>키워드</td></tr>
+<tr><th>설명</th><td>상품을 설명할 수 있는 대표 키워드 기입</td></tr>
+<tr><th>요구 수준</th><td>권장 (중개포털)</td></tr>
+</table>
+</section>
+<section id="class-dataset-publisher">
+<h4>Property: publisher <span class="reqlevel rec">권장</span></h4>
+<table class="def">
+<tr><th>RDF 속성명</th><td><code>dct:publisher</code></td></tr>
+<tr><th>라벨</th><td>발행기관</td></tr>
+<tr><th>설명</th><td>데이터를 게재하여 제공하는 기관(플랫폼 사업자번호)의 정보 기입</td></tr>
+<tr><th>요구 수준</th><td>권장 (중개포털)</td></tr>
+</table>
+</section>
+<section id="class-dataset-distribution">
+<h4>Property: distribution <span class="reqlevel rec">권장</span></h4>
+<table class="def">
+<tr><th>RDF 속성명</th><td><code>dcat:distribution</code></td></tr>
+<tr><th>라벨</th><td>배포방식</td></tr>
+<tr><th>설명</th><td>데이터셋의 배포 방식을 기입</td></tr>
+<tr><th>요구 수준</th><td>권장 (중개포털)</td></tr>
+</table>
+</section>
+<section id="class-dataset-spatial">
+<h4>Property: spatial <span class="reqlevel rec">권장</span></h4>
+<table class="def">
+<tr><th>RDF 속성명</th><td><code>dct:spatial</code></td></tr>
+<tr><th>라벨</th><td>지리적 범위</td></tr>
+<tr><th>설명</th><td>데이터셋에서 다루는 지리적 지역</td></tr>
+<tr><th>요구 수준</th><td>권장 (중개포털)</td></tr>
+</table>
+</section>
+<section id="class-dataset-temporal">
+<h4>Property: temporal <span class="reqlevel rec">권장</span></h4>
+<table class="def">
+<tr><th>RDF 속성명</th><td><code>dct:temporal</code></td></tr>
+<tr><th>라벨</th><td>기간</td></tr>
+<tr><th>설명</th><td>데이터셋에서 다루는 기간</td></tr>
+<tr><th>요구 수준</th><td>권장 (중개포털)</td></tr>
+</table>
+</section>
+<section id="class-dataset-haspurpose">
+<h4>Property: hasPurpose <span class="reqlevel rec">권장</span></h4>
+<table class="def">
+<tr><th>RDF 속성명</th><td><code>dpv:hasPurpose</code></td></tr>
+<tr><th>라벨</th><td>목적</td></tr>
+<tr><th>설명</th><td>데이터 수집 또는 생성의 목적 및 활용 의도</td></tr>
+<tr><th>요구 수준</th><td>권장 (중개포털)</td></tr>
+</table>
+</section>
+<section id="class-dataset-populationcoverage">
+<h4>Property: populationCoverage <span class="reqlevel rec">권장</span></h4>
+<table class="def">
+<tr><th>RDF 속성명</th><td><code>healthdcatap:populationCoverage</code></td></tr>
+<tr><th>라벨</th><td>인구범위</td></tr>
+<tr><th>설명</th><td>데이터가 포함하는 대상 인구 집단 범위</td></tr>
+<tr><th>요구 수준</th><td>권장 (중개포털)</td></tr>
+</table>
+</section>
+<section id="class-dataset-numberofuniqueindividuals">
+<h4>Property: numberOfUniqueIndividuals <span class="reqlevel rec">권장</span></h4>
+<table class="def">
+<tr><th>RDF 속성명</th><td><code>healthdcatap:numberOfUniqueIndividuals</code></td></tr>
+<tr><th>라벨</th><td>고유 개인 수</td></tr>
+<tr><th>설명</th><td>데이터에 포함된 고유 환자(개인) 수</td></tr>
+<tr><th>요구 수준</th><td>권장 (중개포털)</td></tr>
+</table>
+</section>
+<section id="class-dataset-numberofrecords">
+<h4>Property: numberOfRecords <span class="reqlevel rec">권장</span></h4>
+<table class="def">
+<tr><th>RDF 속성명</th><td><code>healthdcatap:numberOfRecords</code></td></tr>
+<tr><th>라벨</th><td>전체 데이터 행 개수</td></tr>
+<tr><th>설명</th><td>전체 데이터 레코드(행) 개수</td></tr>
+<tr><th>요구 수준</th><td>권장 (중개포털)</td></tr>
+</table>
+</section>
+<section id="class-dataset-maxtypicalage">
+<h4>Property: maxTypicalAge <span class="reqlevel rec">권장</span></h4>
+<table class="def">
+<tr><th>RDF 속성명</th><td><code>healthdcatap:maxTypicalAge</code></td></tr>
+<tr><th>라벨</th><td>최대 연령</td></tr>
+<tr><th>설명</th><td>데이터 대상자의 일반적인 최대 연령</td></tr>
+<tr><th>요구 수준</th><td>권장 (중개포털)</td></tr>
+</table>
+</section>
+<section id="class-dataset-mintypicalage">
+<h4>Property: minTypicalAge <span class="reqlevel rec">권장</span></h4>
+<table class="def">
+<tr><th>RDF 속성명</th><td><code>healthdcatap:minTypicalAge</code></td></tr>
+<tr><th>라벨</th><td>최소 연령</td></tr>
+<tr><th>설명</th><td>데이터 대상자의 일반적인 최소 연령</td></tr>
+<tr><th>요구 수준</th><td>권장 (중개포털)</td></tr>
+</table>
+</section>
+<section id="class-dataset-haspersonaldata">
+<h4>Property: hasPersonalData <span class="reqlevel rec">권장</span></h4>
+<table class="def">
+<tr><th>RDF 속성명</th><td><code>dpv:hasPersonalData</code></td></tr>
+<tr><th>라벨</th><td>개인정보 포함 여부</td></tr>
+<tr><th>설명</th><td>개인정보 포함 여부 또는 개인정보 수준</td></tr>
+<tr><th>요구 수준</th><td>권장 (중개포털)</td></tr>
+</table>
+</section>
+<section id="class-dataset-haslegalbasis">
+<h4>Property: hasLegalBasis <span class="reqlevel rec">권장</span></h4>
+<table class="def">
+<tr><th>RDF 속성명</th><td><code>dpv:hasLegalBasis</code></td></tr>
+<tr><th>라벨</th><td>법적 근거</td></tr>
+<tr><th>설명</th><td>데이터 수집·처리의 법적 근거</td></tr>
+<tr><th>요구 수준</th><td>권장 (중개포털)</td></tr>
+</table>
+</section>
+<section id="class-dataset-retentionperiod">
+<h4>Property: retentionPeriod <span class="reqlevel rec">권장</span></h4>
+<table class="def">
+<tr><th>RDF 속성명</th><td><code>healthdcatap:retentionPeriod</code></td></tr>
+<tr><th>라벨</th><td>데이터 보관 기간</td></tr>
+<tr><th>설명</th><td>데이터 보관 기간</td></tr>
+<tr><th>요구 수준</th><td>권장 (중개포털)</td></tr>
+</table>
+</section>
+<section id="class-dataset-publisher">
+<h4>Property: publisher <span class="reqlevel rec">권장</span></h4>
+<table class="def">
+<tr><th>RDF 속성명</th><td><code>dct:publisher</code></td></tr>
+<tr><th>라벨</th><td>데이터 관리기관</td></tr>
+<tr><th>설명</th><td>데이터를 보유·관리하는 기관</td></tr>
+<tr><th>요구 수준</th><td>권장 (중개포털)</td></tr>
+</table>
+</section>
+<section id="class-dataset-hascodingsystem">
+<h4>Property: hasCodingSystem <span class="reqlevel rec">권장</span></h4>
+<table class="def">
+<tr><th>RDF 속성명</th><td><code>healthdcatap:hasCodingSystem</code></td></tr>
+<tr><th>라벨</th><td>코딩 체계</td></tr>
+<tr><th>설명</th><td>사용된 의료 코드 체계 (예: ICD, SNOMED 등)</td></tr>
+<tr><th>요구 수준</th><td>권장 (중개포털)</td></tr>
+</table>
+</section>
+<section id="class-dataset-healththeme">
+<h4>Property: healthTheme <span class="reqlevel rec">권장</span></h4>
+<table class="def">
+<tr><th>RDF 속성명</th><td><code>healthdcatap:healthTheme</code></td></tr>
+<tr><th>라벨</th><td>보건의료 주제</td></tr>
+<tr><th>설명</th><td>보건의료 주제 분류</td></tr>
+<tr><th>요구 수준</th><td>권장 (중개포털)</td></tr>
+</table>
+</section>
+<section id="class-dataset-hascodevalues">
+<h4>Property: hasCodeValues <span class="reqlevel rec">권장</span></h4>
+<table class="def">
+<tr><th>RDF 속성명</th><td><code>healthdcatap:hasCodeValues</code></td></tr>
+<tr><th>라벨</th><td>코드 값</td></tr>
+<tr><th>설명</th><td>코딩시스템의 코드 값 목록 또는 코드 정의 정보</td></tr>
+<tr><th>요구 수준</th><td>권장 (중개포털)</td></tr>
+</table>
+</section>
+<section id="class-dataset-hasqualityannotation">
+<h4>Property: hasQualityAnnotation <span class="reqlevel rec">권장</span></h4>
+<table class="def">
+<tr><th>RDF 속성명</th><td><code>dqv:hasQualityAnnotation</code></td></tr>
+<tr><th>라벨</th><td>품질 정보</td></tr>
+<tr><th>설명</th><td>데이터 품질에 대한 설명 또는 평가 정보</td></tr>
+<tr><th>요구 수준</th><td>권장 (중개포털)</td></tr>
+</table>
+</section>
+</section>
+<section id="class-data-service">
+<h3>Class: Data Service <span class="kolabel">(데이터서비스)</span></h3>
+<p><code>dcat:DataService</code></p>
+<p>데이터 접근 지점이나 하나 이상의 데이터셋 또는 데이터 처리 기능을 제공하는 작업의 모음.</p>
+<section id="class-data-service-title">
+<h4>Property: title <span class="reqlevel req">필수</span></h4>
+<table class="def">
+<tr><th>RDF 속성명</th><td><code>dct:title</code></td></tr>
+<tr><th>라벨</th><td>제목</td></tr>
+<tr><th>설명</th><td>데이터 서비스에 지정된 상품명을 기입</td></tr>
+<tr><th>요구 수준</th><td>필수 (중개포털)</td></tr>
+</table>
+</section>
+<section id="class-data-service-endpointurl">
+<h4>Property: endpointURL <span class="reqlevel req">필수</span></h4>
+<table class="def">
+<tr><th>RDF 속성명</th><td><code>dcat:endpointURL</code></td></tr>
+<tr><th>라벨</th><td>API 접근 URL</td></tr>
+<tr><th>설명</th><td>서비스(IRI)의 루트 위치 또는 기본 엔드포인트</td></tr>
+<tr><th>요구 수준</th><td>필수 (중개포털)</td></tr>
+</table>
+</section>
+<section id="class-data-service-endpointdescription">
+<h4>Property: endpointDescription <span class="reqlevel rec">권장</span></h4>
+<table class="def">
+<tr><th>RDF 속성명</th><td><code>dcat:endpointDescription</code></td></tr>
+<tr><th>라벨</th><td>API 사용 설명</td></tr>
+<tr><th>설명</th><td>작업, 매개 변수 등을 포함하여 엔드포인트를 통해 사용할 수 있는 서비스 설명란으로 실제 엔드포인트 인스턴스에 대한 특정 세부 정보 제공</td></tr>
+<tr><th>요구 수준</th><td>권장 (중개포털)</td></tr>
+</table>
+</section>
+<section id="class-data-service-servesdataset">
+<h4>Property: servesDataset <span class="reqlevel rec">권장</span></h4>
+<table class="def">
+<tr><th>RDF 속성명</th><td><code>dcat:servesDataset</code></td></tr>
+<tr><th>라벨</th><td>서비스 데이터셋</td></tr>
+<tr><th>설명</th><td>데이터 서비스가 배포할 수 있는 데이터셋을 기입</td></tr>
+<tr><th>요구 수준</th><td>권장 (중개포털)</td></tr>
+</table>
+</section>
+</section>
+<section id="class-distribution">
+<h3>Class: Distribution <span class="kolabel">(배포)</span></h3>
+<p><code>dcat:Distribution</code></p>
+<p>데이터셋의 접근 가능한 형태. 다운로드 파일, API, 피드 등 특정 표현.</p>
+<section id="class-distribution-description">
+<h4>Property: description <span class="reqlevel rec">권장</span></h4>
+<table class="def">
+<tr><th>RDF 속성명</th><td><code>dct:description</code></td></tr>
+<tr><th>라벨</th><td>설명</td></tr>
+<tr><th>설명</th><td>배포의 설명을 기입</td></tr>
+<tr><th>요구 수준</th><td>권장 (중개포털)</td></tr>
+</table>
+</section>
+<section id="class-distribution-accessurl">
+<h4>Property: accessURL <span class="reqlevel req">필수</span></h4>
+<table class="def">
+<tr><th>RDF 속성명</th><td><code>dcat:accessURL</code></td></tr>
+<tr><th>라벨</th><td>접근 URL</td></tr>
+<tr><th>설명</th><td>데이터셋의 배포에 대한 액세스 권한을 제공하는 URL 포함되며, 액세스 URL 리소스에는 데이터셋을 가져오는 방법에 대한 정보 포함</td></tr>
+<tr><th>요구 수준</th><td>필수 (중개포털)</td></tr>
+</table>
+</section>
+<section id="class-distribution-availability">
+<h4>Property: availability <span class="reqlevel rec">권장</span></h4>
+<table class="def">
+<tr><th>RDF 속성명</th><td><code>dcatap:availability</code></td></tr>
+<tr><th>라벨</th><td>가용성</td></tr>
+<tr><th>설명</th><td>데이터셋이나 자원의 사용 가능성에 대한 상태 표현(available/unavailable)</td></tr>
+<tr><th>요구 수준</th><td>권장 (중개포털)</td></tr>
+</table>
+</section>
+<section id="class-distribution-format">
+<h4>Property: format <span class="reqlevel rec">권장</span></h4>
+<table class="def">
+<tr><th>RDF 속성명</th><td><code>dct:format</code></td></tr>
+<tr><th>라벨</th><td>형식</td></tr>
+<tr><th>설명</th><td>메타데이터에서 리소스의 물리적 또는 매체유형(MIME Type)을 식별</td></tr>
+<tr><th>요구 수준</th><td>권장 (중개포털)</td></tr>
+</table>
+</section>
+<section id="class-distribution-license">
+<h4>Property: license <span class="reqlevel rec">권장</span></h4>
+<table class="def">
+<tr><th>RDF 속성명</th><td><code>dct:license</code></td></tr>
+<tr><th>라벨</th><td>라이선스</td></tr>
+<tr><th>설명</th><td>데이터셋 배포를 할 수 있는 라이센스를 기입</td></tr>
+<tr><th>요구 수준</th><td>권장 (중개포털)</td></tr>
+</table>
+</section>
+</section>
+<section id="class-catalog-record">
+<h3>Class: Catalog Record <span class="kolabel">(카탈로그 레코드)</span></h3>
+<p><code>dcat:CatalogRecord</code></p>
+<p>카탈로그 내 한 데이터셋 또는 데이터 서비스 항목의 등록 정보를 기술하는 레코드.</p>
+<section id="class-catalog-record-modified">
+<h4>Property: modified <span class="reqlevel req">필수</span></h4>
+<table class="def">
+<tr><th>RDF 속성명</th><td><code>dct:modified</code></td></tr>
+<tr><th>라벨</th><td>최근 수정일</td></tr>
+<tr><th>설명</th><td>카탈로그 항목이 변경되거나 수정된 가장 최근 날짜가 포함</td></tr>
+<tr><th>요구 수준</th><td>필수 (중개포털)</td></tr>
+</table>
+</section>
+<section id="class-catalog-record-issued">
+<h4>Property: issued <span class="reqlevel rec">권장</span></h4>
+<table class="def">
+<tr><th>RDF 속성명</th><td><code>dct:issued</code></td></tr>
+<tr><th>라벨</th><td>최초 발행일</td></tr>
+<tr><th>설명</th><td>카탈로그에 포함된 데이터셋의 생성일자를 기입</td></tr>
+<tr><th>요구 수준</th><td>권장 (중개포털)</td></tr>
+</table>
+</section>
+<section id="class-catalog-record-conformsto">
+<h4>Property: conformsTo <span class="reqlevel rec">권장</span></h4>
+<table class="def">
+<tr><th>RDF 속성명</th><td><code>dct:conformsTo</code></td></tr>
+<tr><th>라벨</th><td>준수 표준</td></tr>
+<tr><th>설명</th><td>데이터셋의 메타데이터가 준수하는 응용 프로그램 프로필을 참조</td></tr>
+<tr><th>요구 수준</th><td>권장 (중개포털)</td></tr>
+</table>
+</section>
+<section id="class-catalog-record-status">
+<h4>Property: status <span class="reqlevel rec">권장</span></h4>
+<table class="def">
+<tr><th>RDF 속성명</th><td><code>adms:status</code></td></tr>
+<tr><th>라벨</th><td>상태</td></tr>
+<tr><th>설명</th><td>데이터셋 및 데이터 서비스 설명이 편집·관리되는 과정에서 해당 카탈로그 레코드의 상태를 의미</td></tr>
+<tr><th>요구 수준</th><td>권장 (중개포털)</td></tr>
+</table>
+</section>
+</section>
+<section id="class-data-product">
+<h3>Class: Data Product <span class="kolabel">(데이터상품)</span></h3>
+<p><code>ndi:DataProduct</code></p>
+<p>플랫폼에서 유통되는 데이터 상품의 운영 정보를 기술.</p>
+<section id="class-data-product-viewcnt">
+<h4>Property: viewCnt <span class="reqlevel req">필수</span></h4>
+<table class="def">
+<tr><th>RDF 속성명</th><td><code>ndi:viewCnt</code></td></tr>
+<tr><th>라벨</th><td>조회수</td></tr>
+<tr><th>설명</th><td>조회수</td></tr>
+<tr><th>요구 수준</th><td>필수 (중개포털)</td></tr>
+</table>
+</section>
+<section id="class-data-product-downloadcnt">
+<h4>Property: downloadCnt <span class="reqlevel req">필수</span></h4>
+<table class="def">
+<tr><th>RDF 속성명</th><td><code>ndi:downloadCnt</code></td></tr>
+<tr><th>라벨</th><td>다운로드 횟수</td></tr>
+<tr><th>설명</th><td>다운로드 횟수</td></tr>
+<tr><th>요구 수준</th><td>필수 (중개포털)</td></tr>
+</table>
+</section>
+<section id="class-data-product-pltfrmaccesstoken">
+<h4>Property: pltfrmAccessToken <span class="reqlevel req">필수</span></h4>
+<table class="def">
+<tr><th>RDF 속성명</th><td><code>ndi:pltfrmAccessToken</code></td></tr>
+<tr><th>라벨</th><td>연계 인증키</td></tr>
+<tr><th>설명</th><td>기관간 연계를 위한 식별키를 기입(NDI 가입 이후 TOKEN값)</td></tr>
+<tr><th>요구 수준</th><td>필수 (중개포털)</td></tr>
+</table>
+</section>
+<section id="class-data-product-srvctype">
+<h4>Property: srvcType <span class="reqlevel req">필수</span></h4>
+<table class="def">
+<tr><th>RDF 속성명</th><td><code>ndi:srvcType</code></td></tr>
+<tr><th>라벨</th><td>서비스 유형</td></tr>
+<tr><th>설명</th><td>데이터를 제공하거나 처리하는 서비스 유형을 기입(dataset, dataservice)</td></tr>
+<tr><th>요구 수준</th><td>필수 (중개포털)</td></tr>
+</table>
+</section>
+</section>
+</section>
+</body>
+</html>
