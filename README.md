@@ -28,5 +28,5 @@ git push -u origin main
 ### 2) Pages 활성화
 GitHub 저장소 → Settings → Pages → **Build and deployment → Source: GitHub Actions** 선택.
 push하면 `.github/workflows/pages.yml`이 자동 배포합니다.
-배포 후 주소: `https://<username>.github.io/healthdata-spec/`
+배포 후 주소: `https://kdyoung100.github.io/healthdata-spec/`
 
