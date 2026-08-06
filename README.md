@@ -1,4 +1,4 @@
-# HealthDataDCAT-AP
+# HealtDCAT-KR
 
 DCAT-AP / HealthDCAT-AP 기반 보건의료 데이터 메타데이터 명세입니다.
 DCAT-AP-KR 와 동일한 ReSpec 스타일로 작성되었습니다.
