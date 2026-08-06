@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
   <meta charset="utf-8">
-  <title>보건의료 데이터 포털을 위한 응용 프로파일 (HealthData DCAT-AP)</title>
+  <title>보건의료 데이터 포털을 위한 응용 프로파일 (HealthDCAT-KR)</title>
   <meta content="width=device-width, initial-scale=1" name="viewport">
   <script src="https://www.w3.org/Tools/respec/respec-w3c" class="remove" defer></script>
   <script class="remove">
@@ -101,7 +101,7 @@
 
 <section id="modeling">
   <h2>모델링 원칙</h2>
-  <p>HealthDCAT-KR은 국제 표준인 DCAT 3을 기반으로 대한민국 국가 메타데이터 표준과 HealthDCAT-AP를 반영하여 구성하였으며, 보건의료 데이터의 검색·연계·활용을 지원하기 위해 필요한 최소의 어휘만을 신규로 정의한다. 구체적인 모델링 원칙은 다음과 같다.</p>
+  <p>HealthDCAT-KR은 국제 표준인 DCAT 2.0을 기반으로 대한민국 국가 메타데이터 표준과 HealthDCAT-AP를 반영하여 구성하였으며, 보건의료 데이터의 검색·연계·활용을 지원하기 위해 필요한 최소의 어휘만을 신규로 정의한다. 구체적인 모델링 원칙은 다음과 같다.</p>
   <ul>
     <li>HealthDCAT-KR은 기존 RDF 어휘의 재사용을 원칙으로 하며, 특히 더블린코어 메타데이터 어휘(DCMI Metadata Terms)를 광범위하게 재사용한다. 예를 들어 제목, 최초 발행일, 최근 수정일은 <code>dct:title</code>, <code>dct:issued</code>, <code>dct:modified</code>로 표현한다.</li>
     <li>HealthDCAT-KR은 국가 데이터 통합플랫폼 연계를 위해 국가 표준 항목을 준용하고, <code>ndi:viewCnt</code>·<code>ndi:downloadCnt</code>·<code>ndi:pltfrmAccessToken</code>·<code>ndi:srvcType</code> 등 국가 데이터 표준 확장 속성을 필수 속성으로 채택한다.</li>
@@ -148,7 +148,7 @@
 
 <section id="vocab-spec">
 <h2>Vocabulary specification</h2>
-<p>HealthData DCAT-AP은 DCAT-AP에 정의되지 않은 속성을 추가하고, 중개 포털의 메타데이터에 맞는 통제 어휘를 정의한다.</p>
+<p>HealthDCAT-KR은 HealthDCAT-AP에 정의되지 않은 속성을 추가하고, 중개 포털의 메타데이터에 맞는 통제 어휘를 정의한다.</p>
 <section id="class-catalog">
 <h3>Class: Catalog <span class="kolabel">(카탈로그)</span></h3>
 <section id="class-catalog-title">
